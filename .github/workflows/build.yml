@@ -17,7 +17,7 @@ jobs:
           gradle-version: 8.10.2
       - name: Unpack and add Firebase config
         run: |
-          unzip -q zuch-phase1.zip
+          unzip -q zuch-phase3.zip
           echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > zuch/app/google-services.json
       - name: Build debug APK
         run: cd zuch && gradle assembleDebug --stacktrace
