@@ -1,0 +1,27 @@
+name: Build ZUCH APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+      - name: Unpack and add Firebase config
+        run: |
+          unzip -q zuch-phase1.zip
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > zuch/app/google-services.json
+      - name: Build debug APK
+        run: cd zuch && gradle assembleDebug --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zuch-debug-apk
+          path: zuch/app/build/outputs/apk/debug/*.apk
