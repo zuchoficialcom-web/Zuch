@@ -15,9 +15,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.10.2
-      - name: Unpack and add Firebase config
+      - name: Unpack newest ZUCH zip and add Firebase config
         run: |
-          unzip -q "zuch-phase4 (1).zip"
+          ZIP="$(ls zuch-phase*.zip | LC_ALL=C sort -V | tail -n 1)"
+          echo "Building from: $ZIP"
+          unzip -q "$ZIP"
           echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > zuch/app/google-services.json
       - name: Build debug APK
         run: cd zuch && gradle assembleDebug --stacktrace
